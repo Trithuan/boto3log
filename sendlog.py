@@ -1,4 +1,5 @@
 import boto3
+import sys
 
 # The calls to AWS STS AssumeRole must be signed with the access key ID
 # and secret access key of an existing IAM user or by using existing temporary 
@@ -16,7 +17,7 @@ sts_client = boto3.client('sts')
 # Call the assume_role method of the STSConnection object and pass the role
 # ARN and a role session name.
 assumed_role_object=sts_client.assume_role(
-    RoleArn="arn:aws:iam::account-of-role-to-assume:role/name-of-role",
+    RoleArn="arn:aws:iam::"+sys.argv[1]+":role/test_role_ec2_prod_cloudtrail_log",
     RoleSessionName="AssumeRoleSession1"
 )
 
@@ -33,7 +34,6 @@ s3_resource=boto3.resource(
     aws_session_token=credentials['SessionToken'],
 )
 
-# Use the Amazon S3 resource object that is now configured with the 
-# credentials to access your S3 buckets. 
-for bucket in s3_resource.buckets.all():
-    print(bucket.name)
+with open('test.log', 'w') as f:
+    f.write('test')
+s3_resource.meta.client.upload_file('test.log', 'test-qobuz-nobori-my-tf-test-bucket-log', 'test.log'
