@@ -36,4 +36,4 @@ s3_resource=boto3.resource(
 
 with open('test.log', 'w') as f:
     f.write('test')
-s3_resource.meta.client.upload_file('test.log', 'test-qobuz-nobori-my-tf-test-bucket-log', 'test.log')
+s3_resource.meta.client.upload_file('test.log', sys.argv[2], 'test.log')
